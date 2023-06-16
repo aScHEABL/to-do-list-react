@@ -35,19 +35,18 @@ export default function AppContainer() {
         </Navbar>
       }
       header={
-        <Header height={{ base: 50, md: 120 }} p="md" bg="transparent">
+        <Header height={{ base: 'fit-content' }} bg="transparent">
           <div style={{ display: 'flex', alignItems: 'center', height: '100%', gap: '16px' }}>
             <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
               <Burger
+                p="sm"
                 opened={opened}
                 onClick={() => setOpened((o) => !o)}
-                size="sm"
+                size="lg"
                 color={theme.colors.gray[6]}
                 mr="xl"
               />
             </MediaQuery>
-            <BsCheck2All />
-            <Text>TO DO LIST</Text>
           </div>
         </Header>
       }
