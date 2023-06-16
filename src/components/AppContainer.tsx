@@ -40,8 +40,8 @@ export default function AppContainer() {
                 mr="xl"
               />
             </MediaQuery>
-            <BsCheck2All />
-            <Text fz="xl">TO DO LIST</Text>
+            <BsCheck2All size="2rem" />
+            <Text fz="2rem">TO DO LIST</Text>
           </div>
         </Header>
       }
