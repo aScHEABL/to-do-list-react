@@ -41,7 +41,7 @@ export default function AppContainer() {
               />
             </MediaQuery>
             <BsCheck2All />
-            <Text>TO DO LIST</Text>
+            <Text fz="xl">TO DO LIST</Text>
           </div>
         </Header>
       }
