@@ -11,7 +11,8 @@ import {
   Flex,
   Divider,
   Button,
-  Grid
+  Grid,
+  Box,
 } from '@mantine/core';
 
 import { TbClipboardList } from "react-icons/tb";
@@ -20,11 +21,6 @@ import { Link } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 
 const useStyles = createStyles((theme) => ({
-  appShellRoot: {
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
-    backgroundImage: "url('https://media.discordapp.net/attachments/1119244481808576543/1119244483536629840/image.png')",
-  },
   btnLink: {
     flex: "1 1 100%", 
     color: "white",
@@ -58,9 +54,6 @@ export default function TaskPage() {
   const [opened, setOpened] = useState(false);
   return (
     <AppShell
-      classNames={{
-        root: classes.appShellRoot
-      }}
       navbarOffsetBreakpoint="sm"
       asideOffsetBreakpoint="sm"
       navbar={
@@ -99,16 +92,11 @@ export default function TaskPage() {
         </MediaQuery>
       }
     >
-      <Grid style={{ height: "100%" }} justify="space-between">
-        <Grid.Col lg={5} style={{ border: '4px solid', borderRadius: "16px", }}>
-          <Text>To Do List</Text>
-        </Grid.Col>
-        <Grid.Col lg={5} style={{ border: '4px solid', borderRadius: "16px" }} span="auto">
-          <Text>In Progress</Text>
-        </Grid.Col>
-        <Grid.Col lg={5} style={{ border: '4px solid', borderRadius: "16px" }} span="auto">
-          <Text>Completed</Text>
-        </Grid.Col>
+      <Box top={0} left={0} pos="fixed" style={{ height: "100vh", width: "100vw",  backgroundImage: "url(https://media.discordapp.net/attachments/1119244481808576543/1119244483536629840/image.png)", zIndex: "-1" }} />
+      <Grid justify="space-around" style={{ height: "100%", gap: "1.5rem" }}>
+        <Grid.Col style={{ height: "100%", border: "4px solid", borderRadius: "16px" }} md={8} lg={3.8}>1</Grid.Col>
+        <Grid.Col style={{ height: "100%", border: "4px solid", borderRadius: "16px" }} md={8} lg={3.8}>2</Grid.Col>
+        <Grid.Col style={{ height: "100%", border: "4px solid", borderRadius: "16px" }} md={8} lg={3.8}>3</Grid.Col>
       </Grid>
     </AppShell>
   );
