@@ -11,14 +11,18 @@ import {
   Flex,
   Divider,
   Button,
+  Grid
 } from '@mantine/core';
 
 import { TbClipboardList } from "react-icons/tb";
 import { BsCalendarCheck, BsCalendar3, BsTrash } from "react-icons/bs";
 import { Link } from 'react-router-dom';
+import uuidv4 from 'uuid/v4'
 
 const useStyles = createStyles((theme) => ({
   appShellRoot: {
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover",
     backgroundImage: "url('https://media.discordapp.net/attachments/1119244481808576543/1119244483536629840/image.png')",
   },
   btnLink: {
@@ -40,7 +44,13 @@ const useStyles = createStyles((theme) => ({
   }
 }))
 
-const tagArray = ["programming", "dental", "healthcare", "sports", "work"]
+const tags = ["programming", "dental", "healthcare", "sports", "work"]
+const tagArray = tags.map((item) => {
+  return {
+    id: uuidv4(),
+    value: item
+  }
+})
 
 export default function TaskPage() {
   const { classes } = useStyles();
@@ -66,9 +76,9 @@ export default function TaskPage() {
           </Flex>
           <Divider my="lg" color="gray" size="md" variant="solid" labelPosition="center" />
           <Flex wrap="wrap" gap={12}>
-            {tagArray.map((item) => (
+            {/* {tagArray.map((item) => (
               <Button classNames={{ root: classes.btnTag }} compact variant="subtle" size="md" radius="sm">{item}</Button>
-            ))}
+            ))} */}
           </Flex>
         </Navbar>
       }
@@ -89,6 +99,17 @@ export default function TaskPage() {
         </MediaQuery>
       }
     >
+      <Grid style={{ height: "100%" }} justify="space-between">
+        <Grid.Col lg={5} style={{ border: '4px solid', borderRadius: "16px", }}>
+          <Text>To Do List</Text>
+        </Grid.Col>
+        <Grid.Col lg={5} style={{ border: '4px solid', borderRadius: "16px" }} span="auto">
+          <Text>In Progress</Text>
+        </Grid.Col>
+        <Grid.Col lg={5} style={{ border: '4px solid', borderRadius: "16px" }} span="auto">
+          <Text>Completed</Text>
+        </Grid.Col>
+      </Grid>
     </AppShell>
   );
 }
