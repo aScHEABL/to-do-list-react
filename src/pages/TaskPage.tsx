@@ -114,7 +114,7 @@ export default function TaskPage() {
         <Grid.Col 
         style={{ height: "100%", border: "4px solid", borderRadius: "16px" }} 
         md={8} lg={3.8}>
-          <Badge style={{ backgroundColor: "rgb(134, 142, 150, 0.7)" }} 
+          <Badge style={{ backgroundColor: "rgb(33, 38, 45, 0.7)" }} 
           size="xl" variant="filled" radius="md">
             TO DO:
           </Badge>
@@ -123,7 +123,7 @@ export default function TaskPage() {
         <Grid.Col 
         style={{ height: "100%", border: "4px solid", borderRadius: "16px" }} 
         md={8} lg={3.8}>
-          <Badge style={{ backgroundColor: "rgb(134, 142, 150, 0.7)" }} 
+          <Badge style={{ backgroundColor: "rgb(33, 38, 45, 0.7)" }} 
           size="xl" variant="filled" radius="md">
             IN PROGRESS:
           </Badge>
@@ -131,7 +131,7 @@ export default function TaskPage() {
         <Grid.Col 
         style={{ height: "100%", border: "4px solid", borderRadius: "16px" }} 
         md={8} lg={3.8}>
-          <Badge style={{ backgroundColor: "rgb(134, 142, 150, 0.7)" }} 
+          <Badge style={{ backgroundColor: "rgb(33, 38, 45, 0.7)" }} 
           size="xl" variant="filled" radius="md">
             COMPLETED:
           </Badge>
