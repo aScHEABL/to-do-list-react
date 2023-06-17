@@ -17,7 +17,7 @@ import {
 import { TbClipboardList } from "react-icons/tb";
 import { BsCalendarCheck, BsCalendar3, BsTrash } from "react-icons/bs";
 import { Link } from 'react-router-dom';
-import uuidv4 from 'uuid/v4'
+import { v4 as uuid } from 'uuid';
 
 const useStyles = createStyles((theme) => ({
   appShellRoot: {
@@ -47,7 +47,7 @@ const useStyles = createStyles((theme) => ({
 const tags = ["programming", "dental", "healthcare", "sports", "work"]
 const tagArray = tags.map((item) => {
   return {
-    id: uuidv4(),
+    id: uuid(),
     value: item
   }
 })
@@ -76,9 +76,9 @@ export default function TaskPage() {
           </Flex>
           <Divider my="lg" color="gray" size="md" variant="solid" labelPosition="center" />
           <Flex wrap="wrap" gap={12}>
-            {/* {tagArray.map((item) => (
-              <Button classNames={{ root: classes.btnTag }} compact variant="subtle" size="md" radius="sm">{item}</Button>
-            ))} */}
+            {tagArray.map((item) => (
+              <Button classNames={{ root: classes.btnTag }} compact variant="subtle" size="md" radius="sm">{item.value}</Button>
+            ))}
           </Flex>
         </Navbar>
       }
