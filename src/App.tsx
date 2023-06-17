@@ -1,6 +1,6 @@
 import React from 'react';
 import { MantineProvider, Text } from '@mantine/core';
-import TaskPage from './components/TaskPage';
+import TaskPage from './pages/TaskPage';
 import { HashRouter } from 'react-router-dom';
 
 export default function App() {
