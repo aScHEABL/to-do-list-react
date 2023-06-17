@@ -13,6 +13,7 @@ import {
   Button,
   Grid,
   Box,
+  Badge
 } from '@mantine/core';
 
 import { TbClipboardList } from "react-icons/tb";
@@ -37,7 +38,7 @@ const useStyles = createStyles((theme) => ({
   }, 
   btnInner: {
     justifyContent: "start",
-  }
+  },
 }))
 
 const tags = ["programming", "dental", "healthcare", "sports", "work"]
@@ -70,7 +71,7 @@ export default function TaskPage() {
           <Divider my="lg" color="gray" size="md" variant="solid" labelPosition="center" />
           <Flex wrap="wrap" gap={12}>
             {tagArray.map((item) => (
-              <Button classNames={{ root: classes.btnTag }} compact variant="subtle" size="md" radius="sm">{item.value}</Button>
+              <Button key={item.id} classNames={{ root: classes.btnTag }} compact variant="subtle" size="md" radius="sm">{item.value}</Button>
             ))}
           </Flex>
         </Navbar>
@@ -92,11 +93,49 @@ export default function TaskPage() {
         </MediaQuery>
       }
     >
-      <Box top={0} left={0} pos="fixed" style={{ height: "100vh", width: "100vw",  backgroundImage: "url(https://media.discordapp.net/attachments/1119244481808576543/1119244483536629840/image.png)", zIndex: "-1" }} />
+      <Box top={0} left={0} pos="fixed" 
+      sx={(theme) => ({
+        height: "100vh",
+        width: "100vw",
+        zIndex: -1,
+        backgroundImage: "url(https://media.discordapp.net/attachments/1119244481808576543/1119244483536629840/image.png)", 
+        "&::before": {
+          content: "''",
+          position: "absolute",
+          left: 0, 
+          right: 0,
+          top: 0,
+          bottom: 0,
+          background: "rgba(57, 64, 70, 0.5)"
+        }
+      })} 
+       />
       <Grid justify="space-around" style={{ height: "100%", gap: "1.5rem" }}>
-        <Grid.Col style={{ height: "100%", border: "4px solid", borderRadius: "16px" }} md={8} lg={3.8}>1</Grid.Col>
-        <Grid.Col style={{ height: "100%", border: "4px solid", borderRadius: "16px" }} md={8} lg={3.8}>2</Grid.Col>
-        <Grid.Col style={{ height: "100%", border: "4px solid", borderRadius: "16px" }} md={8} lg={3.8}>3</Grid.Col>
+        <Grid.Col 
+        style={{ height: "100%", border: "4px solid", borderRadius: "16px" }} 
+        md={8} lg={3.8}>
+          <Badge style={{ backgroundColor: "rgb(134, 142, 150, 0.7)" }} 
+          size="xl" variant="filled" radius="md">
+            TO DO:
+          </Badge>
+          {/* <Button></Button> */}
+        </Grid.Col>
+        <Grid.Col 
+        style={{ height: "100%", border: "4px solid", borderRadius: "16px" }} 
+        md={8} lg={3.8}>
+          <Badge style={{ backgroundColor: "rgb(134, 142, 150, 0.7)" }} 
+          size="xl" variant="filled" radius="md">
+            IN PROGRESS:
+          </Badge>
+        </Grid.Col>
+        <Grid.Col 
+        style={{ height: "100%", border: "4px solid", borderRadius: "16px" }} 
+        md={8} lg={3.8}>
+          <Badge style={{ backgroundColor: "rgb(134, 142, 150, 0.7)" }} 
+          size="xl" variant="filled" radius="md">
+            COMPLETED:
+          </Badge>
+        </Grid.Col>
       </Grid>
     </AppShell>
   );
