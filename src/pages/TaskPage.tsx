@@ -13,11 +13,12 @@ import {
   Button,
   Grid,
   Box,
-  Badge
+  Badge,
+  ActionIcon
 } from '@mantine/core';
 
 import { TbClipboardList } from "react-icons/tb";
-import { BsCalendarCheck, BsCalendar3, BsTrash } from "react-icons/bs";
+import { BsCalendarCheck, BsCalendar3, BsTrash, BsPlusLg } from "react-icons/bs";
 import { Link } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 
@@ -114,27 +115,48 @@ export default function TaskPage() {
         <Grid.Col 
         style={{ height: "100%", border: "4px solid", borderRadius: "16px" }} 
         md={8} lg={3.8}>
-          <Badge style={{ backgroundColor: "rgb(33, 38, 45, 0.7)" }} 
-          size="xl" variant="filled" radius="md">
-            TO DO:
-          </Badge>
-          {/* <Button></Button> */}
+          <Flex justify="space-between" align="center">
+            <Badge style={{ backgroundColor: "rgb(33, 38, 45, 0.7)" }} 
+            size="xl" variant="filled" radius="md">
+              TO DO:
+            </Badge>
+            <ActionIcon size="lg" color="cyan" radius="lg" variant="filled">
+              <BsPlusLg />
+            </ActionIcon>
+          </Flex>
+          <Box sx={(theme) => ({
+            height: "100%",
+            width: "100%",
+            backgroundColor: theme.colors.gray[7]
+          })}>
+
+          </Box>
         </Grid.Col>
         <Grid.Col 
         style={{ height: "100%", border: "4px solid", borderRadius: "16px" }} 
         md={8} lg={3.8}>
-          <Badge style={{ backgroundColor: "rgb(33, 38, 45, 0.7)" }} 
-          size="xl" variant="filled" radius="md">
-            IN PROGRESS:
-          </Badge>
+          <Flex justify="space-between" align="center">
+            <Badge style={{ backgroundColor: "rgb(33, 38, 45, 0.7)" }} 
+            size="xl" variant="filled" radius="md">
+              IN PROGRESS:
+            </Badge>
+            <ActionIcon size="lg" color="cyan" radius="lg" variant="filled">
+              <BsPlusLg />
+            </ActionIcon>
+          </Flex>
         </Grid.Col>
         <Grid.Col 
         style={{ height: "100%", border: "4px solid", borderRadius: "16px" }} 
         md={8} lg={3.8}>
-          <Badge style={{ backgroundColor: "rgb(33, 38, 45, 0.7)" }} 
-          size="xl" variant="filled" radius="md">
-            COMPLETED:
-          </Badge>
+          <Flex justify="space-between" align="center">
+            <Badge style={{ backgroundColor: "rgb(33, 38, 45, 0.7)" }} 
+            size="xl" variant="filled" radius="md">
+              COMPLETED:
+            </Badge>
+            <ActionIcon size="lg" color="cyan" radius="lg" variant="filled">
+              <BsPlusLg />
+            </ActionIcon>
+          </Flex>
         </Grid.Col>
       </Grid>
     </AppShell>
