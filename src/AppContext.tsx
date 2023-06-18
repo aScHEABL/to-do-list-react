@@ -1,7 +1,10 @@
 import React, { createContext, useReducer, ReactNode } from "react";
+import { v4 as uuid } from 'uuid';
 
 interface State {
-    test: any[];
+    toDoList: { id: string; title: string, content: string }[];
+    inProgressList: any[];
+    completedList: any[];
 }
 
 interface ContextValue {
@@ -14,8 +17,14 @@ interface Action {
     payload?: any;
 }
 
-const initialState = {
-  test: [],
+const initialState: State = {
+  toDoList: [{
+     id: uuid(), title: "Read work emails", content: "" 
+    }, 
+    { id: uuid(), title: "Walmart shopping", content: "" 
+    }],
+  inProgressList: [],
+  completedList: []
 };
 
 const AppContext = createContext<ContextValue>({} as ContextValue);

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import {
   AppShell,
   Navbar,
@@ -21,6 +21,8 @@ import { TbClipboardList } from "react-icons/tb";
 import { BsCalendarCheck, BsCalendar3, BsTrash, BsPlusLg } from "react-icons/bs";
 import { Link } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
+import CheckboxCard from '../components/CheckBox';
+import { AppContext } from '../AppContext';
 
 const useStyles = createStyles((theme) => ({
   btnLink: {
@@ -42,6 +44,8 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
+const prop = ['1', '2', '3'];
+
 const tags = ["programming", "dental", "healthcare", "sports", "work"]
 const tagArray = tags.map((item) => {
   return {
@@ -51,6 +55,7 @@ const tagArray = tags.map((item) => {
 })
 
 export default function TaskPage() {
+  const { state } = useContext(AppContext);
   const { classes } = useStyles();
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
@@ -113,7 +118,8 @@ export default function TaskPage() {
        />
       <Grid justify="space-around" style={{ height: "100%", gap: "1.5rem" }}>
         <Grid.Col 
-        style={{ height: "100%", border: "4px solid", borderRadius: "16px" }} 
+        style={{ height: "100%", border: "4px solid", borderRadius: "16px"
+        , paddingBottom: "7%" }} 
         md={8} lg={3.8}>
           <Flex justify="space-between" align="center">
             <Badge style={{ backgroundColor: "rgb(33, 38, 45, 0.7)" }} 
@@ -124,13 +130,22 @@ export default function TaskPage() {
               <BsPlusLg />
             </ActionIcon>
           </Flex>
-          <Box sx={(theme) => ({
+          <Flex direction="column" rowGap={8} sx={(theme) => ({
             height: "100%",
             width: "100%",
-            backgroundColor: theme.colors.gray[7]
+            padding: "3%"
+            // backgroundColor: theme.colors.gray[7]
           })}>
-
-          </Box>
+            {state.toDoList.map((item) => (
+              <CheckboxCard
+                key={item.id}
+                checked={false}
+                defaultChecked={false}
+                title={<Text>{item.title}</Text>}
+                description={<Text>{item.content}</Text>}
+               />
+            ))}
+          </Flex>
         </Grid.Col>
         <Grid.Col 
         style={{ height: "100%", border: "4px solid", borderRadius: "16px" }} 
