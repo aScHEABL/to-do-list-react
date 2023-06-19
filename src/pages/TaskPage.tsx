@@ -55,7 +55,7 @@ const tagArray = tags.map((item) => {
 })
 
 export default function TaskPage() {
-  const { state } = useContext(AppContext);
+  const { state, dispatch } = useContext(AppContext);
   const { classes } = useStyles();
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
