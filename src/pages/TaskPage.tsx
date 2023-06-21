@@ -21,8 +21,8 @@ import { TbClipboardList } from "react-icons/tb";
 import { BsCalendarCheck, BsCalendar3, BsTrash, BsPlusLg } from "react-icons/bs";
 import { Link } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
-import CheckboxCard from '../components/CheckBox';
 import { AppContext } from '../AppContext';
+import { DragDropContext, Droppable, Draggable, } from '@hello-pangea/dnd';
 
 const useStyles = createStyles((theme) => ({
   btnLink: {
@@ -44,7 +44,28 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-const prop = ['1', '2', '3'];
+const init_items = [
+  { id: uuid(), title: "Read work emails" },
+  { id: uuid(), title: "Take out the trash" },
+  { id: uuid(), title: "File taxes" },
+  { id: uuid(), title: "Workout" },
+  { id: uuid(), title: "Call Amy" }
+]
+
+const init_columns = {
+  [uuid()]: {
+    title: "Todo",
+    items: init_items
+  },
+  [uuid()]: {
+    title: "In Progress",
+    items: []
+  },
+  [uuid()]: {
+    title: "Completed",
+    items: []
+  }
+}
 
 const tags = ["programming", "dental", "healthcare", "sports", "work"]
 const tagArray = tags.map((item) => {
@@ -55,10 +76,46 @@ const tagArray = tags.map((item) => {
 })
 
 export default function TaskPage() {
-  const { state, dispatch } = useContext(AppContext);
+  const [columns, setColumns] = useState(init_columns);
   const { classes } = useStyles();
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
+
+  const onDragEnd = (result: any) => {
+    if (!result.destination) return;
+    const { source, destination } = result;
+    if (source.droppableId !== destination.droppableId) {
+      const sourceColumn = columns[source.droppableId];
+      const destColumn = columns[destination.droppableId];
+      const sourceItems = [...sourceColumn.items];
+      const destItems = [...destColumn.items];
+      const [removed] = sourceItems.splice(source.index, 1);
+      destItems.splice(destination.index, 0, removed);
+      setColumns({
+        ...columns,
+        [source.droppableId]: {
+          ...sourceColumn,
+          items: sourceItems
+        },
+        [destination.droppableId]: {
+          ...destColumn,
+          items: destItems
+        }
+      })
+    } else {
+      const column = columns[source.droppableId];
+      const copiedItems = [...column.items];
+      const [removed] = copiedItems.splice(source.index, 1);
+      copiedItems.splice(destination.index, 0, removed);
+      setColumns({
+        ...columns,
+        [source.droppableId]: {
+          ...column,
+          items: copiedItems
+        }
+      })
+    }
+  }
   return (
     <AppShell
       navbarOffsetBreakpoint="sm"
@@ -117,63 +174,93 @@ export default function TaskPage() {
       })} 
        />
       <Grid justify="space-around" style={{ height: "100%", gap: "1.5rem" }}>
-        <Grid.Col 
-        style={{ height: "100%", border: "4px solid", borderRadius: "16px"
-        , paddingBottom: "7%" }} 
-        md={8} lg={3.8}>
-          <Flex justify="space-between" align="center">
-            <Badge style={{ backgroundColor: "rgb(33, 38, 45, 0.7)" }} 
-            size="xl" variant="filled" radius="md">
-              TO DO:
-            </Badge>
-            <ActionIcon size="lg" color="cyan" radius="lg" variant="filled">
-              <BsPlusLg />
-            </ActionIcon>
-          </Flex>
-          <Flex direction="column" rowGap={8} sx={(theme) => ({
-            height: "100%",
-            width: "100%",
-            padding: "3%"
-            // backgroundColor: theme.colors.gray[7]
-          })}>
-            {state.toDoList.map((item) => (
-              <CheckboxCard
-                key={item.id}
-                checked={false}
-                defaultChecked={false}
-                title={<Text>{item.title}</Text>}
-                description={<Text>{item.content}</Text>}
-               />
-            ))}
-          </Flex>
-        </Grid.Col>
-        <Grid.Col 
-        style={{ height: "100%", border: "4px solid", borderRadius: "16px" }} 
-        md={8} lg={3.8}>
-          <Flex justify="space-between" align="center">
-            <Badge style={{ backgroundColor: "rgb(33, 38, 45, 0.7)" }} 
-            size="xl" variant="filled" radius="md">
-              IN PROGRESS:
-            </Badge>
-            <ActionIcon size="lg" color="cyan" radius="lg" variant="filled">
-              <BsPlusLg />
-            </ActionIcon>
-          </Flex>
-        </Grid.Col>
-        <Grid.Col 
-        style={{ height: "100%", border: "4px solid", borderRadius: "16px" }} 
-        md={8} lg={3.8}>
-          <Flex justify="space-between" align="center">
-            <Badge style={{ backgroundColor: "rgb(33, 38, 45, 0.7)" }} 
-            size="xl" variant="filled" radius="md">
-              COMPLETED:
-            </Badge>
-            <ActionIcon size="lg" color="cyan" radius="lg" variant="filled">
-              <BsPlusLg />
-            </ActionIcon>
-          </Flex>
-        </Grid.Col>
+       <DragDropContext onDragEnd={(result: any) => onDragEnd(result)}>
+          {Object.entries(columns).map(([id, column]) => {
+            return (
+              <Droppable droppableId={id} key={id}>
+                {(provided, snapshot) => {
+                  return (
+                    <Grid.Col 
+                    style={{ height: "100%", border: "4px solid", borderRadius: "16px"
+                    , paddingBottom: "7%" }} 
+                    md={8} lg={3.8}>
+                      <Flex justify="space-between" align="center">
+                        <Badge style={{ backgroundColor: "rgb(33, 38, 45, 0.7)" }} 
+                        size="xl" variant="filled" radius="md">
+                          {column.title}
+                        </Badge>
+                        <ActionIcon size="lg" color="cyan" radius="lg" variant="filled">
+                          <BsPlusLg />
+                        </ActionIcon>
+                      </Flex>
+                      <Flex direction="column" rowGap={8} sx={(theme) => ({
+                        height: "100%",
+                        width: "100%",
+                        padding: "3%"
+                      })}>
+                        {column.items.map((item, index) => {
+                          return (
+                            <Draggable key={item.id} draggableId={item.id} index={index}>
+                              {(provided, snapshot) => {
+                                return (
+                                  <Box
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  sx={(theme) => ({
+                                    userSelect: "none",
+                                    padding: 16,
+                                    minHeight: "50px",
+                                    color: "white",
+                                    ...provided.draggableProps.style
+                                  })}
+                                  >
+                                    {item.title}
+                                  </Box>
+                                )
+                              }}
+                            </Draggable>
+                          )
+                        })}
+                        {provided.placeholder}
+                      </Flex>
+                    </Grid.Col>
+                  )
+                }}
+              </Droppable>
+            )
+          })}
+       </DragDropContext>
       </Grid>
+          {/* <Grid.Col 
+          style={{ height: "100%", border: "4px solid", borderRadius: "16px" }} 
+          md={8} lg={3.8}>
+            <Flex justify="space-between" align="center">
+              <Badge style={{ backgroundColor: "rgb(33, 38, 45, 0.7)" }} 
+              size="xl" variant="filled" radius="md">
+                IN PROGRESS:
+              </Badge>
+              <ActionIcon size="lg" color="cyan" radius="lg" variant="filled">
+                <BsPlusLg />
+              </ActionIcon>
+            </Flex>
+          </Grid.Col>
+          <Grid.Col 
+          style={{ height: "100%", border: "4px solid", borderRadius: "16px" }} 
+          md={8} lg={3.8}>
+            <Flex justify="space-between" align="center">
+              <Badge style={{ backgroundColor: "rgb(33, 38, 45, 0.7)" }} 
+              size="xl" variant="filled" radius="md">
+                COMPLETED:
+              </Badge>
+              <ActionIcon size="lg" color="cyan" radius="lg" variant="filled">
+                <BsPlusLg />
+              </ActionIcon>
+            </Flex>
+          </Grid.Col> */}
     </AppShell>
   );
 }
+// {state.toDoList.map((item) => (
+  
+// ))}

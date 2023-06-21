@@ -5,6 +5,7 @@
   "homepage": "./",
   "dependencies": {
     "@emotion/react": "^11.11.1",
+    "@hello-pangea/dnd": "^16.2.0",
     "@mantine/core": "^6.0.13",
     "@mantine/hooks": "^6.0.13",
     "@testing-library/jest-dom": "^5.16.5",
