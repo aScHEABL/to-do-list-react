@@ -182,7 +182,9 @@ export default function TaskPage() {
                   return (
                     <Grid.Col 
                     style={{ height: "100%", border: "4px solid", borderRadius: "16px"
-                    , paddingBottom: "7%" }} 
+                    , paddingBottom: "7%" }}
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
                     md={8} lg={3.8}>
                       <Flex justify="space-between" align="center">
                         <Badge style={{ backgroundColor: "rgb(33, 38, 45, 0.7)" }} 
@@ -203,20 +205,20 @@ export default function TaskPage() {
                             <Draggable key={item.id} draggableId={item.id} index={index}>
                               {(provided, snapshot) => {
                                 return (
-                                  <Box
+                                  <div
                                   ref={provided.innerRef}
                                   {...provided.draggableProps}
                                   {...provided.dragHandleProps}
-                                  sx={(theme) => ({
+                                  style={{
                                     userSelect: "none",
                                     padding: 16,
                                     minHeight: "50px",
                                     color: "white",
                                     ...provided.draggableProps.style
-                                  })}
+                                  }}
                                   >
                                     {item.title}
-                                  </Box>
+                                  </div>
                                 )
                               }}
                             </Draggable>
