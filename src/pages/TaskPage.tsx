@@ -23,6 +23,9 @@ import { Link } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import { AppContext } from '../AppContext';
 import { DragDropContext, Droppable, Draggable, } from '@hello-pangea/dnd';
+import { MdDragIndicator } from "react-icons/md";
+import { IoMdClose } from "react-icons/io";
+import { AiOutlineEdit } from "react-icons/ai";
 
 const useStyles = createStyles((theme) => ({
   btnLink: {
@@ -205,20 +208,54 @@ export default function TaskPage() {
                             <Draggable key={item.id} draggableId={item.id} index={index}>
                               {(provided, snapshot) => {
                                 return (
-                                  <div
+                                  <Flex
+                                  justify="space-between"
+                                  align="center"
+                                  gap={6}
                                   ref={provided.innerRef}
                                   {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  style={{
+                                  
+                                  sx={(theme) => ({
                                     userSelect: "none",
                                     padding: 16,
                                     minHeight: "50px",
                                     color: "white",
-                                    ...provided.draggableProps.style
-                                  }}
-                                  >
-                                    {item.title}
-                                  </div>
+                                    ...provided.draggableProps.style,
+                                    borderRadius: theme.radius.sm,
+                                    backgroundColor: "rgba(2, 14, 23, 0.7)",
+                                    '&:hover': {
+                                      backgroundColor: "rgba(2, 14, 23, 0.8)",
+                                    },
+                                  })}
+                                  > 
+                                  <Flex align="center" {...provided.dragHandleProps}>
+                                    <MdDragIndicator size="2rem" />
+                                  </Flex>
+                                  <Flex justify="flex-start"
+                                  sx={(theme) => ({
+                                    flex: "1 1 80%"
+                                  })}>
+                                    <Text fz="lg">
+                                      {item.title}
+                                    </Text>
+                                  </Flex>
+                                  <Flex gap={6}>
+                                    <ActionIcon sx={(theme) => ({
+                                      "&:hover" : {
+                                        background: "#818b95"
+                                      }
+                                    })}>
+                                      <AiOutlineEdit size="1.5rem" />
+                                    </ActionIcon>
+                                    <ActionIcon sx={(theme) => ({
+                                      "&:hover" : {
+                                        background: "#818b95"
+                                      }
+                                    })}>
+                                      <IoMdClose size="1.5rem" />
+                                    </ActionIcon>
+                                  </Flex>
+                                  </Flex>
                                 )
                               }}
                             </Draggable>
