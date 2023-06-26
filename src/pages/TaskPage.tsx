@@ -99,6 +99,10 @@ export default function TaskPage() {
       })
     }
   }
+
+  const handleClick = (btnAction: string) => {
+    console.log(btnAction);
+  }
   
   return (
     <AppShell
@@ -225,14 +229,18 @@ export default function TaskPage() {
                                       "&:hover" : {
                                         background: "#818b95"
                                       }
-                                    })}>
+                                    })}
+                                    onClick={() => handleClick("EDIT TASK")}
+                                    >
                                       <AiOutlineEdit size="1.5rem" />
                                     </ActionIcon>
                                     <ActionIcon sx={(theme) => ({
                                       "&:hover" : {
                                         background: "#818b95"
                                       }
-                                    })}>
+                                    })}
+                                    onClick={() => handleClick("DELETE TASK")}
+                                    >
                                       <IoMdClose size="1.5rem" />
                                     </ActionIcon>
                                   </Flex>
