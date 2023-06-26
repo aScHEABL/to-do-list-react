@@ -252,35 +252,6 @@ export default function TaskPage() {
           })}
        </DragDropContext>
       </Grid>
-          {/* <Grid.Col 
-          style={{ height: "100%", border: "4px solid", borderRadius: "16px" }} 
-          md={8} lg={3.8}>
-            <Flex justify="space-between" align="center">
-              <Badge style={{ backgroundColor: "rgb(33, 38, 45, 0.7)" }} 
-              size="xl" variant="filled" radius="md">
-                IN PROGRESS:
-              </Badge>
-              <ActionIcon size="lg" color="cyan" radius="lg" variant="filled">
-                <BsPlusLg />
-              </ActionIcon>
-            </Flex>
-          </Grid.Col>
-          <Grid.Col 
-          style={{ height: "100%", border: "4px solid", borderRadius: "16px" }} 
-          md={8} lg={3.8}>
-            <Flex justify="space-between" align="center">
-              <Badge style={{ backgroundColor: "rgb(33, 38, 45, 0.7)" }} 
-              size="xl" variant="filled" radius="md">
-                COMPLETED:
-              </Badge>
-              <ActionIcon size="lg" color="cyan" radius="lg" variant="filled">
-                <BsPlusLg />
-              </ActionIcon>
-            </Flex>
-          </Grid.Col> */}
     </AppShell>
   );
 }
-// {state.toDoList.map((item) => (
-  
-// ))}
