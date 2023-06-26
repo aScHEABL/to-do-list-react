@@ -55,8 +55,7 @@ const tagArray = tags.map((item) => {
 })
 
 export default function TaskPage() {
-  const useContext
-  const [columns, setColumns] = useState(init_columns);
+  const { state, dispatch } = useContext(AppContext);
   const { classes } = useStyles();
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
@@ -65,37 +64,42 @@ export default function TaskPage() {
     if (!result.destination) return;
     const { source, destination } = result;
     if (source.droppableId !== destination.droppableId) {
-      const sourceColumn = columns[source.droppableId];
-      const destColumn = columns[destination.droppableId];
+      const sourceColumn = state.columns[source.droppableId];
+      const destColumn = state.columns[destination.droppableId];
       const sourceItems = [...sourceColumn.items];
       const destItems = [...destColumn.items];
       const [removed] = sourceItems.splice(source.index, 1);
       destItems.splice(destination.index, 0, removed);
-      setColumns({
-        ...columns,
-        [source.droppableId]: {
-          ...sourceColumn,
-          items: sourceItems
-        },
-        [destination.droppableId]: {
-          ...destColumn,
-          items: destItems
+      dispatch({
+        type: "UPDATE_COLUMNS",
+        payload: {
+          [source.droppableId]: {
+            ...sourceColumn,
+            items: sourceItems
+          },
+          [destination.droppableId]: {
+            ...destColumn,
+            items: destItems
+          }
         }
       })
     } else {
-      const column = columns[source.droppableId];
+      const column = state.columns[source.droppableId];
       const copiedItems = [...column.items];
       const [removed] = copiedItems.splice(source.index, 1);
       copiedItems.splice(destination.index, 0, removed);
-      setColumns({
-        ...columns,
-        [source.droppableId]: {
-          ...column,
-          items: copiedItems
+      dispatch({
+        type: "UPDATE_COLUMNS",
+        payload: {
+          [source.droppableId]: {
+            ...column,
+            items: copiedItems
+          }
         }
       })
     }
   }
+  
   return (
     <AppShell
       navbarOffsetBreakpoint="sm"
@@ -155,7 +159,7 @@ export default function TaskPage() {
        />
       <Grid justify="space-around" style={{ height: "100%", gap: "1.5rem" }}>
        <DragDropContext onDragEnd={(result: any) => onDragEnd(result)}>
-          {Object.entries(columns).map(([id, column]) => {
+          {Object.entries(state.columns).map(([id, column]) => {
             return (
               <Droppable droppableId={id} key={id}>
                 {(provided, snapshot) => {

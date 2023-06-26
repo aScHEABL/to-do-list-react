@@ -1,8 +1,14 @@
-import React, { createContext, useReducer, ReactNode } from "react";
+import React, { createContext, useReducer, ReactNode, useState } from "react";
 import { v4 as uuid } from 'uuid';
 
+interface Item {
+  id: string;
+  title: string;
+}
 interface State {
-  [key: string]: { title: string, items: {}[] }
+  columns: {
+    [key: string]: { title: string, items: Item[] }
+  }
 }
 
 interface ContextValue {
@@ -15,7 +21,8 @@ interface Action {
   payload?: any;
 }
 
-const init_items = [
+
+const init_items: Item[] = [
   { id: uuid(), title: "Read work emails" },
   { id: uuid(), title: "Take out the trash" },
   { id: uuid(), title: "File taxes" },
@@ -24,17 +31,19 @@ const init_items = [
 ]
 
 const initialState: State = {
-  [uuid()]: {
-    title: "Todo",
-    items: init_items
-  },
-  [uuid()]: {
-    title: "In Progress",
-    items: []
-  },
-  [uuid()]: {
-    title: "Completed",
-    items: []
+  columns: {
+    [uuid()]: {
+      title: "Todo",
+      items: init_items
+    },
+    [uuid()]: {
+      title: "In Progress",
+      items: []
+    },
+    [uuid()]: {
+      title: "Completed",
+      items: []
+    }
   }
 }
 
@@ -42,11 +51,14 @@ const AppContext = createContext<ContextValue>({} as ContextValue);
 
 const reducer = (state: State, action: Action) => {
   switch (action.type) {
-    case "TEST":
+    case "UPDATE_COLUMNS":
       return {
         ...state,
-        test: action.payload.test,
-      };
+        columns: {
+          ...state.columns,
+          ...action.payload
+        }
+      }
     default:
       return state;
   }
