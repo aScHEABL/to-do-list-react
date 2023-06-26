@@ -17,12 +17,11 @@ import {
   ActionIcon
 } from '@mantine/core';
 
-import { TbClipboardList } from "react-icons/tb";
-import { BsCalendarCheck, BsCalendar3, BsTrash, BsPlusLg } from "react-icons/bs";
 import { Link } from 'react-router-dom';
-import { v4 as uuid } from 'uuid';
 import { AppContext } from '../AppContext';
+import { v4 as uuid } from 'uuid';
 import { DragDropContext, Droppable, Draggable, } from '@hello-pangea/dnd';
+import { BsCalendarCheck, BsCalendar3, BsTrash, BsPlusLg } from "react-icons/bs";
 import { MdDragIndicator } from "react-icons/md";
 import { IoMdClose } from "react-icons/io";
 import { AiOutlineEdit } from "react-icons/ai";
@@ -47,29 +46,6 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-const init_items = [
-  { id: uuid(), title: "Read work emails" },
-  { id: uuid(), title: "Take out the trash" },
-  { id: uuid(), title: "File taxes" },
-  { id: uuid(), title: "Workout" },
-  { id: uuid(), title: "Call Amy" }
-]
-
-const init_columns = {
-  [uuid()]: {
-    title: "Todo",
-    items: init_items
-  },
-  [uuid()]: {
-    title: "In Progress",
-    items: []
-  },
-  [uuid()]: {
-    title: "Completed",
-    items: []
-  }
-}
-
 const tags = ["programming", "dental", "healthcare", "sports", "work"]
 const tagArray = tags.map((item) => {
   return {
@@ -79,6 +55,7 @@ const tagArray = tags.map((item) => {
 })
 
 export default function TaskPage() {
+  const useContext
   const [columns, setColumns] = useState(init_columns);
   const { classes } = useStyles();
   const theme = useMantineTheme();
