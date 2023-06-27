@@ -122,13 +122,10 @@ export default function TaskPage() {
   useEffect(() => {
     const savedState = localStorage.getItem("state");
     if (savedState) dispatch({ type: "SET_STATE", payload: JSON.parse(savedState) });
-    // console.log(savedState);
   }, [])
   
   useEffect(() => {
     window.localStorage.setItem("state", JSON.stringify(state))
-    console.log("Localstore updated!");
-    console.log(window.localStorage);
   }, [state])
   
   return (
@@ -204,7 +201,7 @@ export default function TaskPage() {
                       <Flex justify="space-between" align="center">
                         <Badge style={{ backgroundColor: "rgb(33, 38, 45, 0.7)" }} 
                         size="xl" variant="filled" radius="md">
-                          {column.title}
+                          {column.title}: {column.items.length}
                         </Badge>
                         <ActionIcon size="lg" color="cyan" radius="lg" variant="filled">
                           <BsPlusLg />
