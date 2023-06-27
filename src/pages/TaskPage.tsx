@@ -44,6 +44,11 @@ const useStyles = createStyles((theme) => ({
   btnInner: {
     justifyContent: "start",
   },
+  taskIconBtn: {
+    "&:hover" : {
+      background: "#818b95"
+    }
+  }
 }))
 
 const tags = ["programming", "dental", "healthcare", "sports", "work"]
@@ -225,20 +230,12 @@ export default function TaskPage() {
                                     </Text>
                                   </Flex>
                                   <Flex gap={6}>
-                                    <ActionIcon sx={(theme) => ({
-                                      "&:hover" : {
-                                        background: "#818b95"
-                                      }
-                                    })}
+                                    <ActionIcon className={ classes.taskIconBtn }
                                     onClick={() => handleClick("EDIT TASK")}
                                     >
                                       <AiOutlineEdit size="1.5rem" />
                                     </ActionIcon>
-                                    <ActionIcon sx={(theme) => ({
-                                      "&:hover" : {
-                                        background: "#818b95"
-                                      }
-                                    })}
+                                    <ActionIcon className={ classes.taskIconBtn }
                                     onClick={() => handleClick("DELETE TASK")}
                                     >
                                       <IoMdClose size="1.5rem" />
