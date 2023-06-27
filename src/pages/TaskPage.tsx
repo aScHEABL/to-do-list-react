@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import {
   AppShell,
   Navbar,
@@ -107,7 +107,29 @@ export default function TaskPage() {
 
   const handleClick = (btnAction: string) => {
     console.log(btnAction);
+    switch (btnAction) {
+      case "EDIT_TASK":
+
+        break;
+      case "DELETE_TASK":
+
+        break;
+      default:
+        break;
+    }
   }
+  
+  useEffect(() => {
+    const savedState = localStorage.getItem("state");
+    if (savedState) dispatch({ type: "SET_STATE", payload: JSON.parse(savedState) });
+    // console.log(savedState);
+  }, [])
+  
+  useEffect(() => {
+    window.localStorage.setItem("state", JSON.stringify(state))
+    console.log("Localstore updated!");
+    console.log(window.localStorage);
+  }, [state])
   
   return (
     <AppShell

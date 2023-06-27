@@ -59,6 +59,8 @@ const reducer = (state: State, action: Action) => {
           ...action.payload
         }
       }
+    case 'SET_STATE':
+      return action.payload;
     default:
       return state;
   }
