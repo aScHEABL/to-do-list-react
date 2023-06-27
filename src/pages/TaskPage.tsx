@@ -14,9 +14,12 @@ import {
   Grid,
   Box,
   Badge,
-  ActionIcon
+  ActionIcon,
+  Group,
+  Modal,
 } from '@mantine/core';
 
+import { useDisclosure } from '@mantine/hooks';
 import { Link } from 'react-router-dom';
 import { AppContext } from '../AppContext';
 import { v4 as uuid } from 'uuid';
@@ -63,7 +66,8 @@ export default function TaskPage() {
   const { state, dispatch } = useContext(AppContext);
   const { classes } = useStyles();
   const theme = useMantineTheme();
-  const [opened, setOpened] = useState(false);
+  const [appShellOpened, setAppShellOpened] = useState(false);
+  const [modalOpened, { open, close }] = useDisclosure(false);
 
   const onDragEnd = (result: any) => {
     if (!result.destination) return;
@@ -108,6 +112,9 @@ export default function TaskPage() {
   const handleClick = (btnAction: string) => {
     console.log(btnAction);
     switch (btnAction) {
+      case "ADD_TASK":
+
+        break;
       case "EDIT_TASK":
 
         break;
@@ -133,7 +140,7 @@ export default function TaskPage() {
       navbarOffsetBreakpoint="sm"
       asideOffsetBreakpoint="sm"
       navbar={
-        <Navbar p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 250 }} height="90%" bg="transparent" 
+        <Navbar p="md" hiddenBreakpoint="sm" hidden={!appShellOpened} width={{ sm: 250 }} height="90%" bg="transparent" 
         style={{ border: '4px solid', borderRadius: '32px' }}>
           <Text fz="1.5rem" color="white" fw="bold">Filters</Text>
           <Flex wrap="wrap">
@@ -157,8 +164,8 @@ export default function TaskPage() {
             <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
               <Burger
                 p="sm"
-                opened={opened}
-                onClick={() => setOpened((o) => !o)}
+                opened={appShellOpened}
+                onClick={() => setAppShellOpened((o) => !o)}
                 size="lg"
                 color={theme.colors.gray[6]}
                 mr="xl"
@@ -203,7 +210,8 @@ export default function TaskPage() {
                         size="xl" variant="filled" radius="md">
                           {column.title}: {column.items.length}
                         </Badge>
-                        <ActionIcon size="lg" color="cyan" radius="lg" variant="filled">
+                        <ActionIcon size="lg" color="cyan" radius="lg" variant="filled"
+                        onClick={() => handleClick("ADD_TASK")}>
                           <BsPlusLg />
                         </ActionIcon>
                       </Flex>
