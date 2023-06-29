@@ -15,11 +15,13 @@ import {
   Box,
   Badge,
   ActionIcon,
-  Group,
   Modal,
+  Input,
+  Select,
 } from '@mantine/core';
 
 import { useDisclosure } from '@mantine/hooks';
+import { DateInput } from '@mantine/dates';
 import { Link } from 'react-router-dom';
 import { AppContext } from '../AppContext';
 import { v4 as uuid } from 'uuid';
@@ -64,10 +66,11 @@ const tagArray = tags.map((item) => {
 
 export default function TaskPage() {
   const { state, dispatch } = useContext(AppContext);
+  const [activePriority, setActivePriority] = useState();
   const { classes } = useStyles();
   const theme = useMantineTheme();
   const [appShellOpened, setAppShellOpened] = useState(false);
-  const [modalOpened, { open, close }] = useDisclosure(false);
+  const [isModalOpened, { open: openModal, close: closeModal }] = useDisclosure(false);
 
   const onDragEnd = (result: any) => {
     if (!result.destination) return;
@@ -109,11 +112,11 @@ export default function TaskPage() {
     }
   }
 
-  const handleClick = (btnAction: string) => {
+  function handleClick(btnAction: string) {
     console.log(btnAction);
     switch (btnAction) {
       case "ADD_TASK":
-
+        openModal();
         break;
       case "EDIT_TASK":
 
@@ -124,6 +127,10 @@ export default function TaskPage() {
       default:
         break;
     }
+  }
+
+  function handlePriorityClick(event: any) {
+    setActivePriority((prev) => event.target.textContent.toLowerCase());
   }
   
   useEffect(() => {
@@ -192,6 +199,67 @@ export default function TaskPage() {
         }
       })} 
        />
+      <Modal opened={isModalOpened} onClose={closeModal} title="Add Task" centered>
+        <Flex wrap="wrap" gap={25}>
+          <Box 
+          sx={(theme) => ({
+            flex: "1 1 45%"
+          })}
+          >
+            <Text component="label">Task name</Text>
+            <Input></Input>
+          </Box>
+          <Box
+          sx={(theme) => ({
+            flex: "1 1 45%"
+          })}>
+          <Select
+            withinPortal={true}
+            label="Category"
+            placeholder="Pick one"
+            defaultValue="personal"
+            data={[
+              { value: 'personal', label: 'Personal' },
+              { value: 'work', label: 'Work' },
+              { value: 'education', label: 'Education' },
+            ]}
+          />
+          </Box>
+          <Box
+          sx={(theme) => ({
+            flex: "1 1 45%"
+          })}
+          >
+            <Text component="label">Due Date</Text>
+            <Input></Input>
+          </Box>
+          <Box
+          sx={(theme) => ({
+            flex: "1 1 45%"
+          })}
+          >
+
+          </Box>
+          <Box 
+          sx={(theme) => ({
+            flex: "1 1 45%"
+          })}
+          >
+            <Text component="label">Priority: </Text>
+            <Flex gap={8}>
+              <Button variant={ activePriority === "low" ? "filled" : "outline" } color="teal" uppercase
+              value="low" onClick={(e) => handlePriorityClick(e)}
+              >LOW</Button>
+              <Button variant={ activePriority === "medium" ? "filled" : "outline" } color="yellow" uppercase
+              value="medium" onClick={(e) => handlePriorityClick(e)}
+              >MEDIUM</Button>
+              <Button variant={ activePriority === "high" ? "filled" : "outline" } color="red" uppercase
+              value="high" onClick={(e) => handlePriorityClick(e)}
+              >HIGH</Button>
+            </Flex>
+          </Box>
+        </Flex>
+      </Modal>
       <Grid justify="space-around" style={{ height: "100%", gap: "1.5rem" }}>
        <DragDropContext onDragEnd={(result: any) => onDragEnd(result)}>
           {Object.entries(state.columns).map(([id, column]) => {
