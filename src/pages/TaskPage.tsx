@@ -16,7 +16,7 @@ import {
   Badge,
   ActionIcon,
   Modal,
-  Input,
+  TextInput,
   Select,
 } from '@mantine/core';
 
@@ -66,11 +66,12 @@ const tagArray = tags.map((item) => {
 
 export default function TaskPage() {
   const { state, dispatch } = useContext(AppContext);
-  const [activePriority, setActivePriority] = useState();
+  const [activePriority, setActivePriority] = useState("" as string);
   const { classes } = useStyles();
   const theme = useMantineTheme();
   const [appShellOpened, setAppShellOpened] = useState(false);
   const [isModalOpened, { open: openModal, close: closeModal }] = useDisclosure(false);
+  const [dateValue, setDateValue] = useState<Date | null>(new Date());
 
   const onDragEnd = (result: any) => {
     if (!result.destination) return;
@@ -115,8 +116,11 @@ export default function TaskPage() {
   function handleClick(btnAction: string) {
     console.log(btnAction);
     switch (btnAction) {
-      case "ADD_TASK":
+      case "OPEN_ADD_TASK_MODAL":
         openModal();
+        break;
+      case "ADD_TASK":
+        
         break;
       case "EDIT_TASK":
 
@@ -127,10 +131,6 @@ export default function TaskPage() {
       default:
         break;
     }
-  }
-
-  function handlePriorityClick(event: any) {
-    setActivePriority((prev) => event.target.textContent.toLowerCase());
   }
   
   useEffect(() => {
@@ -206,8 +206,12 @@ export default function TaskPage() {
             flex: "1 1 45%"
           })}
           >
-            <Text component="label">Task name</Text>
-            <Input></Input>
+            <TextInput
+              placeholder="Write your task here"
+              label="Task Name"
+              error={false} // "This field can't be emptied!"
+              withAsterisk
+            />
           </Box>
           <Box
           sx={(theme) => ({
@@ -230,8 +234,16 @@ export default function TaskPage() {
             flex: "1 1 45%"
           })}
           >
-            <Text component="label">Due Date</Text>
-            <Input></Input>
+            <DateInput
+              popoverProps={{ withinPortal: true }}
+              clearable={true}
+              value={dateValue}
+              onChange={setDateValue}
+              label="Due Date"
+              placeholder="Date input"
+              maw={400}
+              mx="auto"
+            />
           </Box>
           <Box
           sx={(theme) => ({
@@ -248,16 +260,19 @@ export default function TaskPage() {
             <Text component="label">Priority: </Text>
             <Flex gap={8}>
               <Button variant={ activePriority === "low" ? "filled" : "outline" } color="teal" uppercase
-              value="low" onClick={(e) => handlePriorityClick(e)}
+              value="low" onClick={() => setActivePriority("low")}
               >LOW</Button>
               <Button variant={ activePriority === "medium" ? "filled" : "outline" } color="yellow" uppercase
-              value="medium" onClick={(e) => handlePriorityClick(e)}
+              value="medium" onClick={() => setActivePriority("medium")}
               >MEDIUM</Button>
               <Button variant={ activePriority === "high" ? "filled" : "outline" } color="red" uppercase
-              value="high" onClick={(e) => handlePriorityClick(e)}
+              value="high" onClick={() => setActivePriority("high")}
               >HIGH</Button>
             </Flex>
           </Box>
+          <Flex w="100%" justify="flex-end">
+            <Button>ADD</Button>
+          </Flex>
         </Flex>
       </Modal>
       <Grid justify="space-around" style={{ height: "100%", gap: "1.5rem" }}>
@@ -279,7 +294,7 @@ export default function TaskPage() {
                           {column.title}: {column.items.length}
                         </Badge>
                         <ActionIcon size="lg" color="cyan" radius="lg" variant="filled"
-                        onClick={() => handleClick("ADD_TASK")}>
+                        onClick={() => handleClick("OPEN_ADD_TASK_MODAL")}>
                           <BsPlusLg />
                         </ActionIcon>
                       </Flex>
