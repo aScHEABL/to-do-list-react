@@ -15,13 +15,9 @@ import {
   Box,
   Badge,
   ActionIcon,
-  Modal,
-  TextInput,
-  Select,
 } from '@mantine/core';
 
 import { useDisclosure } from '@mantine/hooks';
-import { DateInput } from '@mantine/dates';
 import { Link } from 'react-router-dom';
 import { AppContext } from '../AppContext';
 import { v4 as uuid } from 'uuid';
@@ -30,6 +26,7 @@ import { BsCalendarCheck, BsCalendar3, BsTrash, BsPlusLg } from "react-icons/bs"
 import { MdDragIndicator } from "react-icons/md";
 import { IoMdClose } from "react-icons/io";
 import { AiOutlineEdit } from "react-icons/ai";
+import AddTaskModal from '../components/AddTask';
 
 const useStyles = createStyles((theme) => ({
   btnLink: {
@@ -66,7 +63,6 @@ const tagArray = tags.map((item) => {
 
 export default function TaskPage() {
   const { state, dispatch } = useContext(AppContext);
-  const [activePriority, setActivePriority] = useState("" as string);
   const { classes } = useStyles();
   const theme = useMantineTheme();
   const [appShellOpened, setAppShellOpened] = useState(false);
@@ -199,82 +195,7 @@ export default function TaskPage() {
         }
       })} 
        />
-      <Modal opened={isModalOpened} onClose={closeModal} title="Add Task" centered>
-        <Flex wrap="wrap" gap={25}>
-          <Box 
-          sx={(theme) => ({
-            flex: "1 1 45%"
-          })}
-          >
-            <TextInput
-              placeholder="Write your task here"
-              label="Task Name"
-              error={false} // "This field can't be emptied!"
-              withAsterisk
-            />
-          </Box>
-          <Box
-          sx={(theme) => ({
-            flex: "1 1 45%"
-          })}>
-          <Select
-            withinPortal={true}
-            label="Category"
-            placeholder="Pick one"
-            defaultValue="personal"
-            data={[
-              { value: 'personal', label: 'Personal' },
-              { value: 'work', label: 'Work' },
-              { value: 'education', label: 'Education' },
-            ]}
-          />
-          </Box>
-          <Box
-          sx={(theme) => ({
-            flex: "1 1 45%"
-          })}
-          >
-            <DateInput
-              popoverProps={{ withinPortal: true }}
-              clearable={true}
-              value={dateValue}
-              onChange={setDateValue}
-              label="Due Date"
-              placeholder="Date input"
-              maw={400}
-              mx="auto"
-            />
-          </Box>
-          <Box
-          sx={(theme) => ({
-            flex: "1 1 45%"
-          })}
-          >
-
-          </Box>
-          <Box 
-          sx={(theme) => ({
-            flex: "1 1 45%"
-          })}
-          >
-            <Text component="label">Priority: </Text>
-            <Flex gap={8}>
-              <Button variant={ activePriority === "low" ? "filled" : "outline" } color="teal" uppercase
-              value="low" onClick={() => setActivePriority("low")}
-              >LOW</Button>
-              <Button variant={ activePriority === "medium" ? "filled" : "outline" } color="yellow" uppercase
-              value="medium" onClick={() => setActivePriority("medium")}
-              >MEDIUM</Button>
-              <Button variant={ activePriority === "high" ? "filled" : "outline" } color="red" uppercase
-              value="high" onClick={() => setActivePriority("high")}
-              >HIGH</Button>
-            </Flex>
-          </Box>
-          <Flex w="100%" justify="flex-end">
-            <Button>ADD</Button>
-          </Flex>
-        </Flex>
-      </Modal>
+      <AddTaskModal isModalOpened={isModalOpened} closeModal={closeModal} />
       <Grid justify="space-around" style={{ height: "100%", gap: "1.5rem" }}>
        <DragDropContext onDragEnd={(result: any) => onDragEnd(result)}>
           {Object.entries(state.columns).map(([id, column]) => {
