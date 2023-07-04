@@ -4,6 +4,8 @@ import { v4 as uuid } from 'uuid';
 interface Item {
   id: string;
   title: string;
+  dueDate: any;
+  priority: string;
 }
 interface State {
   columns: {
@@ -23,11 +25,11 @@ interface Action {
 
 
 const init_items: Item[] = [
-  { id: uuid(), title: "Read work emails" },
-  { id: uuid(), title: "Take out the trash" },
-  { id: uuid(), title: "File taxes" },
-  { id: uuid(), title: "Workout" },
-  { id: uuid(), title: "Call Amy" }
+  { id: uuid(), title: "Read work emails", dueDate: "2023-06-23", priority: "medium" },
+  { id: uuid(), title: "Take out the trash", dueDate: "2023-05-15", priority: "medium" },
+  { id: uuid(), title: "File taxes", dueDate: "2023-06-28", priority: "medium" },
+  { id: uuid(), title: "Workout", dueDate: "2023-07-18", priority: "medium" },
+  { id: uuid(), title: "Call Amy", dueDate: "2023-08-30", priority: "medium" }
 ]
 
 const initialState: State = {
