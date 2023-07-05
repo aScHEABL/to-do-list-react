@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { 
     Flex,
     Button,
@@ -10,6 +10,7 @@ import {
  } from "@mantine/core";
 
  import { DateInput } from '@mantine/dates';
+ import { AppContext } from '../AppContext';
 
 interface AddTaskModalProps {
     isModalOpened: boolean;
@@ -21,6 +22,7 @@ export default function AddTaskModal({ isModalOpened, closeModal }: AddTaskModal
     const [taskName, setTaskName] = useState("" as string);
     const [ifInputError, setInputError] = useState<boolean | string>(false);
     const [dateValue, setDateValue] = useState<Date | null>(new Date());
+    const { state, dispatch } = useContext(AppContext);
     function handleClick(btnAction: string) {
         switch (btnAction) {
             case "ADD_TASK":
@@ -28,6 +30,7 @@ export default function AddTaskModal({ isModalOpened, closeModal }: AddTaskModal
                     setInputError("You must fill this field!");
                     return;
                 }
+            // dispatch
                 break;
             default:
                 break;

@@ -115,9 +115,6 @@ export default function TaskPage() {
       case "OPEN_ADD_TASK_MODAL":
         openModal();
         break;
-      case "ADD_TASK":
-        
-        break;
       case "EDIT_TASK":
 
         break;
