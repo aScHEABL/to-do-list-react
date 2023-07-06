@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { 
     Flex,
     Button,
@@ -30,7 +30,7 @@ export default function AddTaskModal({ isModalOpened, columnID, closeModal }: Ad
         activePriority: "medium",
         name: "",
         ifInputError: false,
-        dateValue: new Date()
+        dateValue: new Date(),
     }
 
     const [task, setTask] = useState(initialTask);
@@ -39,8 +39,7 @@ export default function AddTaskModal({ isModalOpened, columnID, closeModal }: Ad
         console.log(columnID);
         switch (btnAction) {
             case "ADD_TASK":
-                if (!task.name) {
-                    setTask({ ...task, ifInputError: "You must fill this field!" });
+                if (task.name.length === 0) {
                     return;
                 }
                 // const task = {
@@ -57,10 +56,14 @@ export default function AddTaskModal({ isModalOpened, columnID, closeModal }: Ad
     }
 
     function handleChange(eventName: string, eventValue: any) {
-        if (eventName === "name") setTask({ ...task, ifInputError: false });
         setTask({ ...task, [eventName]: eventValue });
-        console.log(task);
     }
+
+    useEffect(() => {
+        console.log(task);
+        if (task.name.length === 0) setTask({ ...task, ifInputError: "You must fill this field!" })
+        else setTask({ ...task, ifInputError: false })
+    }, [task.name])
     return (
         <Modal opened={isModalOpened} onClose={closeModal} title="Add Task" centered>
             <Flex wrap="wrap" gap={25}>
