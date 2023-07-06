@@ -14,23 +14,32 @@ import {
 
 interface AddTaskModalProps {
     isModalOpened: boolean;
+    columnID: string;
     closeModal: () => void;
 }
 
-export default function AddTaskModal({ isModalOpened, closeModal }: AddTaskModalProps) {
+export default function AddTaskModal({ isModalOpened, columnID, closeModal }: AddTaskModalProps) {
+
     const [activePriority, setActivePriority] = useState("medium" as string);
     const [taskName, setTaskName] = useState("" as string);
     const [ifInputError, setInputError] = useState<boolean | string>(false);
     const [dateValue, setDateValue] = useState<Date | null>(new Date());
     const { state, dispatch } = useContext(AppContext);
     function handleClick(btnAction: string) {
+        console.log(columnID);
         switch (btnAction) {
             case "ADD_TASK":
                 if (!taskName) {
                     setInputError("You must fill this field!");
                     return;
                 }
-            // dispatch
+                // const task = {
+                //     id: String(Date.now()),
+                //     title: newTaskTitle,
+                //     dueDate: newTaskDueDate,
+                //     priority: newTaskPriority,
+                //   };
+                //   dispatch({ type: "ADD_TASK", payload: { columnId, task } });
                 break;
             default:
                 break;

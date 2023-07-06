@@ -63,6 +63,46 @@ const reducer = (state: State, action: Action) => {
       }
     case 'SET_STATE':
       return action.payload;
+      case 'ADD_TASK':
+      return {
+        ...state,
+        columns: {
+          ...state.columns,
+          [action.payload.columnId]: {
+            ...state.columns[action.payload.columnId],
+            items: [
+              ...state.columns[action.payload.columnId].items,
+              action.payload.task
+            ]
+          }
+        }
+      }
+    case 'EDIT_TASK':
+      return {
+        ...state,
+        columns: {
+          ...state.columns,
+          [action.payload.columnId]: {
+            ...state.columns[action.payload.columnId],
+            items: state.columns[action.payload.columnId].items.map(item =>
+              item.id === action.payload.taskId ? action.payload.updatedTask : item
+            )
+          }
+        }
+      }
+    case 'DELETE_TASK':
+      return {
+        ...state,
+        columns: {
+          ...state.columns,
+          [action.payload.columnId]: {
+            ...state.columns[action.payload.columnId],
+            items: state.columns[action.payload.columnId].items.filter(
+              item => item.id !== action.payload.taskId
+            )
+          }
+        }
+      }
     default:
       return state;
   }

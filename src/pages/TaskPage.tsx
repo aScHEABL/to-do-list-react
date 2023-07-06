@@ -66,8 +66,9 @@ export default function TaskPage() {
   const { classes } = useStyles();
   const theme = useMantineTheme();
   const [appShellOpened, setAppShellOpened] = useState(false);
-  const [isModalOpened, { open: openModal, close: closeModal }] = useDisclosure(false);
   const [dateValue, setDateValue] = useState<Date | null>(new Date());
+  const [columnID, setColumnID] = useState("");
+  const [isModalOpened, { open: openModal, close: closeModal }] = useDisclosure(false);
 
   const onDragEnd = (result: any) => {
     if (!result.destination) return;
@@ -109,10 +110,11 @@ export default function TaskPage() {
     }
   }
 
-  function handleClick(btnAction: string) {
+  function handleClick(btnAction: string, columnID?: string) {
     console.log(btnAction);
     switch (btnAction) {
       case "OPEN_ADD_TASK_MODAL":
+        setColumnID(String(columnID));
         openModal();
         break;
       case "EDIT_TASK":
@@ -192,7 +194,7 @@ export default function TaskPage() {
         }
       })} 
        />
-      <AddTaskModal isModalOpened={isModalOpened} closeModal={closeModal} />
+      <AddTaskModal isModalOpened={isModalOpened} columnID={columnID} closeModal={closeModal} />
       <Grid justify="space-around" style={{ height: "100%", gap: "1.5rem" }}>
        <DragDropContext onDragEnd={(result: any) => onDragEnd(result)}>
           {Object.entries(state.columns).map(([id, column]) => {
@@ -212,7 +214,7 @@ export default function TaskPage() {
                           {column.title}: {column.items.length}
                         </Badge>
                         <ActionIcon size="lg" color="cyan" radius="lg" variant="filled"
-                        onClick={() => handleClick("OPEN_ADD_TASK_MODAL")}>
+                        onClick={() => handleClick("OPEN_ADD_TASK_MODAL", id)}>
                           <BsPlusLg />
                         </ActionIcon>
                       </Flex>
