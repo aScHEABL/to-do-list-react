@@ -18,19 +18,29 @@ interface AddTaskModalProps {
     closeModal: () => void;
 }
 
-export default function AddTaskModal({ isModalOpened, columnID, closeModal }: AddTaskModalProps) {
+interface Task {
+    activePriority: string;
+    name: string,
+    ifInputError: boolean | string;
+    dateValue: Date;
+}
 
-    const [activePriority, setActivePriority] = useState("medium" as string);
-    const [taskName, setTaskName] = useState("" as string);
-    const [ifInputError, setInputError] = useState<boolean | string>(false);
-    const [dateValue, setDateValue] = useState<Date | null>(new Date());
+export default function AddTaskModal({ isModalOpened, columnID, closeModal }: AddTaskModalProps) {
+    const initialTask: Task = {
+        activePriority: "medium",
+        name: "",
+        ifInputError: false,
+        dateValue: new Date()
+    }
+
+    const [task, setTask] = useState(initialTask);
     const { state, dispatch } = useContext(AppContext);
     function handleClick(btnAction: string) {
         console.log(columnID);
         switch (btnAction) {
             case "ADD_TASK":
-                if (!taskName) {
-                    setInputError("You must fill this field!");
+                if (!task.name) {
+                    setTask({ ...task, ifInputError: "You must fill this field!" });
                     return;
                 }
                 // const task = {
@@ -46,9 +56,10 @@ export default function AddTaskModal({ isModalOpened, columnID, closeModal }: Ad
         }
     }
 
-    function handleChange(e: any) {
-        setInputError(false);
-        setTaskName(e.target.value);
+    function handleChange(eventName: string, eventValue: any) {
+        if (eventName === "name") setTask({ ...task, ifInputError: false });
+        setTask({ ...task, [eventName]: eventValue });
+        console.log(task);
     }
     return (
         <Modal opened={isModalOpened} onClose={closeModal} title="Add Task" centered>
@@ -59,11 +70,12 @@ export default function AddTaskModal({ isModalOpened, columnID, closeModal }: Ad
             })}
             >
                 <TextInput
-                value={taskName}
-                onChange={(e) => handleChange(e)}
+                value={task.name}
+                name="name"
+                onChange={(e) => handleChange(e.target.name, e.target.value)}
                 placeholder="Write your task here"
                 label="Task Name"
-                error={ifInputError} // "This field can't be emptied!"
+                error={task.ifInputError} // "This field can't be emptied!"
                 withAsterisk
                 />
             </Box>
@@ -72,6 +84,7 @@ export default function AddTaskModal({ isModalOpened, columnID, closeModal }: Ad
                 flex: "1 1 45%"
             })}>
             <Select
+                name="category"
                 withinPortal={true}
                 label="Category"
                 placeholder="Pick one"
@@ -89,10 +102,11 @@ export default function AddTaskModal({ isModalOpened, columnID, closeModal }: Ad
             })}
             >
                 <DateInput
+                name="dateValue"
                 popoverProps={{ withinPortal: true }}
                 clearable={true}
-                value={dateValue}
-                onChange={setDateValue}
+                value={task.dateValue}
+                onChange={(e) => handleChange("dateValue", e)}
                 label="Due Date"
                 placeholder="Date input"
                 maw={400}
@@ -113,14 +127,14 @@ export default function AddTaskModal({ isModalOpened, columnID, closeModal }: Ad
             >
                 <Text component="label">Priority: </Text>
                 <Flex gap={8}>
-                <Button variant={ activePriority === "low" ? "filled" : "outline" } color="teal" uppercase
-                value="low" onClick={() => setActivePriority("low")}
+                <Button variant={ task.activePriority === "low" ? "filled" : "outline" } name="priority" color="teal" uppercase
+                value="low" onClick={() => setTask({ ...task, activePriority: "low" })}
                 >LOW</Button>
-                <Button variant={ activePriority === "medium" ? "filled" : "outline" } color="yellow" uppercase
-                value="medium" onClick={() => setActivePriority("medium")}
+                <Button variant={ task.activePriority === "medium" ? "filled" : "outline" } name="priority" color="yellow" uppercase
+                value="medium" onClick={() => setTask({ ...task, activePriority: "medium" })}
                 >MEDIUM</Button>
-                <Button variant={ activePriority === "high" ? "filled" : "outline" } color="red" uppercase
-                value="high" onClick={() => setActivePriority("high")}
+                <Button variant={ task.activePriority === "high" ? "filled" : "outline" } name="priority" color="red" uppercase
+                value="high" onClick={() => setTask({ ...task, activePriority: "high" })}
                 >HIGH</Button>
                 </Flex>
             </Box>
