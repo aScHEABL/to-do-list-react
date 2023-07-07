@@ -11,26 +11,33 @@ import {
 
  import { DateInput } from '@mantine/dates';
  import { AppContext } from '../AppContext';
+ import { v4 as uuid } from 'uuid';
 
-interface AddTaskModalProps {
+interface TaskModalProps {
     isModalOpened: boolean;
     columnID: string;
     closeModal: () => void;
 }
 
 interface Task {
-    activePriority: string;
-    name: string,
+    id: string;
+    title: string;
+    category: string;
+    priority: string;
     ifInputError: boolean | string;
-    dateValue: Date;
+    dueDate: Date;
 }
 
-export default function AddTaskModal({ isModalOpened, columnID, closeModal }: AddTaskModalProps) {
+let ifInputBefore = false;
+
+export default function TaskModal({ isModalOpened, columnID, closeModal }: TaskModalProps) {
     const initialTask: Task = {
-        activePriority: "medium",
-        name: "",
+        id: uuid(),
+        title: "",
+        category: "",
+        dueDate: new Date(),
+        priority: "medium",
         ifInputError: false,
-        dateValue: new Date(),
     }
 
     const [task, setTask] = useState(initialTask);
@@ -39,16 +46,27 @@ export default function AddTaskModal({ isModalOpened, columnID, closeModal }: Ad
         console.log(columnID);
         switch (btnAction) {
             case "ADD_TASK":
-                if (task.name.length === 0) {
+                if (task.title.length === 0) {
                     return;
                 }
-                // const task = {
-                //     id: String(Date.now()),
-                //     title: newTaskTitle,
-                //     dueDate: newTaskDueDate,
-                //     priority: newTaskPriority,
-                //   };
-                //   dispatch({ type: "ADD_TASK", payload: { columnId, task } });
+                const newTask = {
+                    id: task.id,
+                    title: task.title,
+                    category: task.category,
+                    dueDate: task.dueDate,
+                    priority: task.priority,
+                  }
+                  dispatch({ type: "ADD_TASK", payload: { columnID, newTask } });
+                  closeModal();
+                  ifInputBefore = false;
+                  setTask({
+                    id: uuid(),
+                    title: "",
+                    category: "",
+                    dueDate: new Date(),
+                    priority: "medium",
+                    ifInputError: false,
+                  })
                 break;
             default:
                 break;
@@ -60,10 +78,12 @@ export default function AddTaskModal({ isModalOpened, columnID, closeModal }: Ad
     }
 
     useEffect(() => {
-        console.log(task);
-        if (task.name.length === 0) setTask({ ...task, ifInputError: "You must fill this field!" })
-        else setTask({ ...task, ifInputError: false })
-    }, [task.name])
+        if (task.title.length === 0 && ifInputBefore === true) setTask({ ...task, ifInputError: "You must fill this field!" })
+        else {
+            setTask({ ...task, ifInputError: false });
+            ifInputBefore = true;
+        }
+    }, [task.title])
     return (
         <Modal opened={isModalOpened} onClose={closeModal} title="Add Task" centered>
             <Flex wrap="wrap" gap={25}>
@@ -73,11 +93,11 @@ export default function AddTaskModal({ isModalOpened, columnID, closeModal }: Ad
             })}
             >
                 <TextInput
-                value={task.name}
-                name="name"
+                value={task.title}
+                name="title"
                 onChange={(e) => handleChange(e.target.name, e.target.value)}
                 placeholder="Write your task here"
-                label="Task Name"
+                label="Task Title"
                 error={task.ifInputError} // "This field can't be emptied!"
                 withAsterisk
                 />
@@ -105,11 +125,11 @@ export default function AddTaskModal({ isModalOpened, columnID, closeModal }: Ad
             })}
             >
                 <DateInput
-                name="dateValue"
+                name="dueDate"
                 popoverProps={{ withinPortal: true }}
                 clearable={true}
-                value={task.dateValue}
-                onChange={(e) => handleChange("dateValue", e)}
+                value={task.dueDate}
+                onChange={(e) => handleChange("dueDate", e)}
                 label="Due Date"
                 placeholder="Date input"
                 maw={400}
@@ -130,14 +150,14 @@ export default function AddTaskModal({ isModalOpened, columnID, closeModal }: Ad
             >
                 <Text component="label">Priority: </Text>
                 <Flex gap={8}>
-                <Button variant={ task.activePriority === "low" ? "filled" : "outline" } name="priority" color="teal" uppercase
-                value="low" onClick={() => setTask({ ...task, activePriority: "low" })}
+                <Button variant={ task.priority === "low" ? "filled" : "outline" } name="priority" color="teal" uppercase
+                value="low" onClick={() => setTask({ ...task, priority: "low" })}
                 >LOW</Button>
-                <Button variant={ task.activePriority === "medium" ? "filled" : "outline" } name="priority" color="yellow" uppercase
-                value="medium" onClick={() => setTask({ ...task, activePriority: "medium" })}
+                <Button variant={ task.priority === "medium" ? "filled" : "outline" } name="priority" color="yellow" uppercase
+                value="medium" onClick={() => setTask({ ...task, priority: "medium" })}
                 >MEDIUM</Button>
-                <Button variant={ task.activePriority === "high" ? "filled" : "outline" } name="priority" color="red" uppercase
-                value="high" onClick={() => setTask({ ...task, activePriority: "high" })}
+                <Button variant={ task.priority === "high" ? "filled" : "outline" } name="priority" color="red" uppercase
+                value="high" onClick={() => setTask({ ...task, priority: "high" })}
                 >HIGH</Button>
                 </Flex>
             </Box>

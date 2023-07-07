@@ -26,7 +26,7 @@ import { BsCalendarCheck, BsCalendar3, BsTrash, BsPlusLg } from "react-icons/bs"
 import { MdDragIndicator } from "react-icons/md";
 import { IoMdClose } from "react-icons/io";
 import { AiOutlineEdit } from "react-icons/ai";
-import AddTaskModal from '../components/AddTask';
+import AddTaskModal from '../components/TaskModal';
 
 const useStyles = createStyles((theme) => ({
   btnLink: {
@@ -131,6 +131,7 @@ export default function TaskPage() {
   useEffect(() => {
     const savedState = localStorage.getItem("state");
     if (savedState) dispatch({ type: "SET_STATE", payload: JSON.parse(savedState) });
+    console.log(state);
   }, [])
   
   useEffect(() => {
