@@ -110,18 +110,20 @@ export default function TaskPage() {
     }
   }
 
-  function handleClick(btnAction: string, columnID?: string) {
+  function handleClick(btnAction: string, passedColumnID?: string, passedItemID?: string) {
     console.log(btnAction);
     switch (btnAction) {
       case "OPEN_ADD_TASK_MODAL":
-        setColumnID(String(columnID));
+        setColumnID(String(passedColumnID));
         openModal();
         break;
       case "EDIT_TASK":
-
+        setColumnID(String(passedColumnID));
+        // openModal();
         break;
       case "DELETE_TASK":
-
+        setColumnID(String(passedColumnID));
+        dispatch({ type: "DELETE_TASK", payload: { columnID: passedColumnID, taskID: passedItemID } })
         break;
       default:
         break;
@@ -262,12 +264,12 @@ export default function TaskPage() {
                                   </Flex>
                                   <Flex gap={6}>
                                     <ActionIcon className={ classes.taskIconBtn }
-                                    onClick={() => handleClick("EDIT TASK")}
+                                    onClick={() => handleClick("EDIT_TASK", id, item.id)}
                                     >
                                       <AiOutlineEdit size="1.5rem" />
                                     </ActionIcon>
                                     <ActionIcon className={ classes.taskIconBtn }
-                                    onClick={() => handleClick("DELETE TASK")}
+                                    onClick={() => handleClick("DELETE_TASK", id, item.id)}
                                     >
                                       <IoMdClose size="1.5rem" />
                                     </ActionIcon>

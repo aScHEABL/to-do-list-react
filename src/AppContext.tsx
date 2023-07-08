@@ -96,10 +96,10 @@ const reducer = (state: State, action: Action) => {
         ...state,
         columns: {
           ...state.columns,
-          [action.payload.columnId]: {
-            ...state.columns[action.payload.columnId],
-            items: state.columns[action.payload.columnId].items.filter(
-              item => item.id !== action.payload.taskId
+          [action.payload.columnID]: {
+            ...state.columns[action.payload.columnID],
+            items: state.columns[action.payload.columnID].items.filter(
+              item => item.id !== action.payload.taskID
             )
           }
         }
