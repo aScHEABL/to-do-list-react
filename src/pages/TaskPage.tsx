@@ -27,6 +27,7 @@ import { MdDragIndicator } from "react-icons/md";
 import { IoMdClose } from "react-icons/io";
 import { AiOutlineEdit } from "react-icons/ai";
 import AddTaskModal from '../components/TaskModal';
+import TaskModalExperimental from '../components/TaskModalExperimental';
 
 const useStyles = createStyles((theme) => ({
   btnLink: {
@@ -66,8 +67,8 @@ export default function TaskPage() {
   const { classes } = useStyles();
   const theme = useMantineTheme();
   const [appShellOpened, setAppShellOpened] = useState(false);
-  const [dateValue, setDateValue] = useState<Date | null>(new Date());
   const [columnID, setColumnID] = useState("");
+  const [modalType, setModalType] = useState("");
   const [isModalOpened, { open: openModal, close: closeModal }] = useDisclosure(false);
 
   const onDragEnd = (result: any) => {
@@ -115,11 +116,13 @@ export default function TaskPage() {
     switch (btnAction) {
       case "OPEN_ADD_TASK_MODAL":
         setColumnID(String(passedColumnID));
+        setModalType("ADD_TASK");
         openModal();
         break;
       case "EDIT_TASK":
         setColumnID(String(passedColumnID));
-        // openModal();
+        setModalType("EDIT_TASK");
+        openModal();
         break;
       case "DELETE_TASK":
         setColumnID(String(passedColumnID));
@@ -133,7 +136,6 @@ export default function TaskPage() {
   useEffect(() => {
     const savedState = localStorage.getItem("state");
     if (savedState) dispatch({ type: "SET_STATE", payload: JSON.parse(savedState) });
-    console.log(state);
   }, [])
   
   useEffect(() => {
@@ -197,7 +199,8 @@ export default function TaskPage() {
         }
       })} 
        />
-      <AddTaskModal isModalOpened={isModalOpened} columnID={columnID} closeModal={closeModal} />
+      {/* <AddTaskModal isModalOpened={isModalOpened} columnID={columnID} closeModal={closeModal} /> */}
+      <TaskModalExperimental modalType={modalType} isModalOpened={isModalOpened} columnID={columnID} closeModal={closeModal} />
       <Grid justify="space-around" style={{ height: "100%", gap: "1.5rem" }}>
        <DragDropContext onDragEnd={(result: any) => onDragEnd(result)}>
           {Object.entries(state.columns).map(([id, column]) => {
