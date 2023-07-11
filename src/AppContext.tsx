@@ -5,7 +5,7 @@ interface Item {
   id: string;
   title: string;
   category: string;
-  dueDate: any;
+  dueDate: Date;
   priority: string;
 }
 interface State {
@@ -26,11 +26,11 @@ interface Action {
 
 
 const init_items: Item[] = [
-  { id: uuid(), title: "Read work emails", category: "work", dueDate: "2023-06-23", priority: "medium" },
-  { id: uuid(), title: "Take out the trash", category: "personal",dueDate: "2023-05-15", priority: "medium" },
-  { id: uuid(), title: "File taxes", category: "personal",dueDate: "2023-06-28", priority: "medium" },
-  { id: uuid(), title: "Workout", category: "personal", dueDate: "2023-07-18", priority: "medium" },
-  { id: uuid(), title: "Call Amy", category:"education", dueDate: "2023-08-30", priority: "medium" }
+  { id: uuid(), title: "Read work emails", category: "work", dueDate: new Date("2023-06-23"), priority: "medium" },
+  { id: uuid(), title: "Take out the trash", category: "personal", dueDate: new Date("2023-05-15"), priority: "medium" },
+  { id: uuid(), title: "File taxes", category: "personal", dueDate: new Date("2023-06-28"), priority: "medium" },
+  { id: uuid(), title: "Workout", category: "personal", dueDate: new Date("2023-07-18"), priority: "medium" },
+  { id: uuid(), title: "Call Amy", category:"education", dueDate: new Date("2023-08-30"), priority: "medium" }
 ]
 
 const initialState: State = {
@@ -83,10 +83,10 @@ const reducer = (state: State, action: Action) => {
         ...state,
         columns: {
           ...state.columns,
-          [action.payload.columnId]: {
-            ...state.columns[action.payload.columnId],
-            items: state.columns[action.payload.columnId].items.map(item =>
-              item.id === action.payload.taskId ? action.payload.updatedTask : item
+          [action.payload.columnID]: {
+            ...state.columns[action.payload.columnID],
+            items: state.columns[action.payload.columnID].items.map(item =>
+              item.id === action.payload.taskID ? action.payload.updatedTask : item
             )
           }
         }

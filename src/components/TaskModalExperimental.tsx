@@ -49,7 +49,7 @@ function AddTask({ isModalOpened, columnID, closeModal }: TaskModalProps) {
     const initialTask: Task = {
         id: uuid(),
         title: "",
-        category: "",
+        category: "personal",
         dueDate: new Date(),
         priority: "medium",
         ifInputError: false,
@@ -59,7 +59,7 @@ function AddTask({ isModalOpened, columnID, closeModal }: TaskModalProps) {
     const { state, dispatch } = useContext(AppContext);
     function handleAddBtnClick() {
             if (task.title.length === 0) {
-                setTask({ ...task, ifInputError: "You must fill this field!" })
+                setTask({ ...task, ifInputError: "You must fill in this field!" })
                 return;
             }
             const newTask = {
@@ -122,7 +122,8 @@ function AddTask({ isModalOpened, columnID, closeModal }: TaskModalProps) {
                 withinPortal={true}
                 label="Category"
                 placeholder="Pick one"
-                defaultValue="personal"
+                value={task.category}
+                onChange={(e) => setTask({ ...task, category: String(e) })}
                 data={[
                 { value: 'personal', label: 'Personal' },
                 { value: 'work', label: 'Work' },
@@ -184,16 +185,25 @@ function EditTask({ isModalOpened, columnID, closeModal, itemID }: TaskModalProp
     const { state, dispatch } = useContext(AppContext);
     const [task, setTask] = useState<Task>({} as Task);
 
-    function handleChange(targetName: string, targetValue: string) {
-        setTask({ ...task, [targetName]: targetValue });
-        console.log(task);
+    // function handleChange(targetName: string, targetValue: string) {
+    //     setTask({ ...task, [targetName]: targetValue });
+    //     // console.log(task);
+    // }
+
+    function handleSaveBtnClick() {
+        dispatch({ type: "EDIT_TASK", payload: { columnID: columnID, taskID: task.id, updatedTask: task } })
     }
     
     useEffect(() => {
-        const taskFromContext = state.columns[columnID].items?.find((item) => item.id === itemID);
+        const taskFromContext = state.columns[columnID].items.find((item) => item.id === itemID);
         setTask(Object(taskFromContext));
-        console.log(task);
-    }, [task.id])
+        console.log(typeof task.dueDate);
+    }, [itemID])
+
+    // useEffect(() => {
+    //     dispatch({ type: "EDIT_TASK", payload: { columnID: columnID, taskID: task.id, updatedTask: task } })
+    //     console.log(state.columns);
+    // }, [task])
 
     return (
         <Modal opened={isModalOpened} onClose={closeModal} title="Edit Task" centered>
@@ -204,13 +214,13 @@ function EditTask({ isModalOpened, columnID, closeModal, itemID }: TaskModalProp
             })}
             >
                 <TextInput
-                value={task.title || ""}
-                name="title"
-                onChange={(e) => handleChange(e.target.name, e.target.value)}
-                placeholder="Write your task here"
-                label="Task Title"
-                error={false} // "This field can't be emptied!"
-                withAsterisk
+                    value={task.title || ""}
+                    name="title"
+                    onChange={(e) => setTask({ ...task, title: e.target.value })}
+                    placeholder="Write your task here"
+                    label="Task Title"
+                    error={(!task.title) ? "You must fill in this field!" : false} // "This field can't be emptied!"
+                    withAsterisk
                 />
             </Box>
             <Box
@@ -222,7 +232,7 @@ function EditTask({ isModalOpened, columnID, closeModal, itemID }: TaskModalProp
                 withinPortal={true}
                 label="Category"
                 placeholder="Pick one"
-                defaultValue="personal"
+                value="personal"
                 data={[
                 { value: 'personal', label: 'Personal' },
                 { value: 'work', label: 'Work' },
@@ -236,15 +246,17 @@ function EditTask({ isModalOpened, columnID, closeModal, itemID }: TaskModalProp
             })}
             >
                 <DateInput
-                name="dueDate"
-                popoverProps={{ withinPortal: true }}
-                clearable={true}
-                
-                
-                label="Due Date"
-                placeholder="Date input"
-                maw={400}
-                mx="auto"
+                    name="dueDate"
+                    popoverProps={{ withinPortal: true }}
+                    clearable={true}
+                    // value={task.dueDate}
+                    // value={task.dueDate instanceof Date ? task.dueDate : new Date()}
+                    // onChange={(e: Date) => setTask({ ...task, dueDate: e })}
+                    // onChange={(e: Date) => setTask({ ...task, dueDate: new Date(e.toString()) })}
+                    label="Due Date"
+                    placeholder="Date input"
+                    maw={400}
+                    mx="auto"
                 />
             </Box>
             <Box
@@ -261,19 +273,19 @@ function EditTask({ isModalOpened, columnID, closeModal, itemID }: TaskModalProp
             >
                 <Text component="label">Priority: </Text>
                 <Flex gap={8}>
-                <Button variant="filled" name="priority" color="teal" uppercase
-                value="low"
+                <Button variant={(task.priority === "low") ? "filled" : "outline"} name="priority" color="teal" uppercase
+                value="low" onClick={() => setTask({ ...task, priority: "low" })}
                 >LOW</Button>
-                <Button variant="filled" name="priority" color="yellow" uppercase
-                value="medium"
+                <Button variant={(task.priority === "medium") ? "filled" : "outline"} name="priority" color="yellow" uppercase
+                value="medium" onClick={() => setTask({ ...task, priority: "medium" })}
                 >MEDIUM</Button>
-                <Button variant="filled" name="priority" color="red" uppercase
-                value="high"
+                <Button variant={(task.priority === "high") ? "filled" : "outline"} name="priority" color="red" uppercase
+                value="high" onClick={() => setTask({ ...task, priority: "high" })}
                 >HIGH</Button>
                 </Flex>
             </Box>
             <Flex w="100%" justify="flex-end">
-                <Button>ADD</Button>
+                <Button onClick={() => handleSaveBtnClick()}>Save</Button>
             </Flex>
             </Flex>
         </Modal>
