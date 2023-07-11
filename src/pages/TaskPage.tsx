@@ -68,6 +68,7 @@ export default function TaskPage() {
   const theme = useMantineTheme();
   const [appShellOpened, setAppShellOpened] = useState(false);
   const [columnID, setColumnID] = useState("");
+  const [itemID, setItemID] = useState("");
   const [modalType, setModalType] = useState("");
   const [isModalOpened, { open: openModal, close: closeModal }] = useDisclosure(false);
 
@@ -112,7 +113,6 @@ export default function TaskPage() {
   }
 
   function handleClick(btnAction: string, passedColumnID?: string, passedItemID?: string) {
-    console.log(btnAction);
     switch (btnAction) {
       case "OPEN_ADD_TASK_MODAL":
         setColumnID(String(passedColumnID));
@@ -121,6 +121,7 @@ export default function TaskPage() {
         break;
       case "EDIT_TASK":
         setColumnID(String(passedColumnID));
+        setItemID(String(passedItemID));
         setModalType("EDIT_TASK");
         openModal();
         break;
@@ -200,7 +201,8 @@ export default function TaskPage() {
       })} 
        />
       {/* <AddTaskModal isModalOpened={isModalOpened} columnID={columnID} closeModal={closeModal} /> */}
-      <TaskModalExperimental modalType={modalType} isModalOpened={isModalOpened} columnID={columnID} closeModal={closeModal} />
+      <TaskModalExperimental modalType={modalType} isModalOpened={isModalOpened} 
+      closeModal={closeModal} columnID={columnID} itemID={itemID} />
       <Grid justify="space-around" style={{ height: "100%", gap: "1.5rem" }}>
        <DragDropContext onDragEnd={(result: any) => onDragEnd(result)}>
           {Object.entries(state.columns).map(([id, column]) => {

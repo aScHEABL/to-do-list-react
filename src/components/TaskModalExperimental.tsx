@@ -16,8 +16,9 @@ import {
 interface TaskModalProps {
     modalType?: string;
     isModalOpened: boolean;
-    columnID: string;
     closeModal: () => void;
+    columnID: string;
+    itemID?: string;
 }
 
 interface Task {
@@ -29,13 +30,16 @@ interface Task {
     dueDate: Date;
 }
 
-export default function TaskModalExperimental({ modalType, isModalOpened, columnID, closeModal }: TaskModalProps) {
+export default function TaskModalExperimental({ modalType, isModalOpened, columnID, closeModal, itemID }: TaskModalProps) {
     return (
         <>
-            {(modalType === "ADD_TASK") ? 
-                (<AddTask isModalOpened={isModalOpened} columnID={columnID} closeModal={closeModal} />) :
-                (<EditTask isModalOpened={isModalOpened} columnID={columnID} closeModal={closeModal} />)
-            }
+            { (() => {
+                if (modalType === "ADD_TASK") {
+                    return (<AddTask isModalOpened={isModalOpened} columnID={columnID} closeModal={closeModal} />)
+                } else if (modalType === "EDIT_TASK") {
+                    return (<EditTask isModalOpened={isModalOpened} columnID={columnID} closeModal={closeModal} itemID={itemID} />)
+                }
+            })() }
         </>
     )
 }
@@ -53,9 +57,7 @@ function AddTask({ isModalOpened, columnID, closeModal }: TaskModalProps) {
 
     const [task, setTask] = useState(initialTask);
     const { state, dispatch } = useContext(AppContext);
-
     function handleAddBtnClick() {
-        console.log(columnID);
             if (task.title.length === 0) {
                 setTask({ ...task, ifInputError: "You must fill this field!" })
                 return;
@@ -93,6 +95,7 @@ function AddTask({ isModalOpened, columnID, closeModal }: TaskModalProps) {
     }, [task.title])
 
     return (
+        
         <Modal opened={isModalOpened} onClose={closeModal} title="Add Task" centered>
             <Flex wrap="wrap" gap={25}>
             <Box 
@@ -177,10 +180,102 @@ function AddTask({ isModalOpened, columnID, closeModal }: TaskModalProps) {
     )
 }
 
-function EditTask({ isModalOpened, columnID, closeModal }: TaskModalProps) {
+function EditTask({ isModalOpened, columnID, closeModal, itemID }: TaskModalProps) {
+    const { state, dispatch } = useContext(AppContext);
+    const [task, setTask] = useState<Task>({} as Task);
+
+    function handleChange(targetName: string, targetValue: string) {
+        setTask({ ...task, [targetName]: targetValue });
+        console.log(task);
+    }
+    
+    useEffect(() => {
+        const taskFromContext = state.columns[columnID].items?.find((item) => item.id === itemID);
+        setTask(Object(taskFromContext));
+        console.log(task);
+    }, [task.id])
+
     return (
         <Modal opened={isModalOpened} onClose={closeModal} title="Edit Task" centered>
+            <Flex wrap="wrap" gap={25}>
+            <Box 
+            sx={(theme) => ({
+                flex: "1 1 45%"
+            })}
+            >
+                <TextInput
+                value={task.title || ""}
+                name="title"
+                onChange={(e) => handleChange(e.target.name, e.target.value)}
+                placeholder="Write your task here"
+                label="Task Title"
+                error={false} // "This field can't be emptied!"
+                withAsterisk
+                />
+            </Box>
+            <Box
+            sx={(theme) => ({
+                flex: "1 1 45%"
+            })}>
+            <Select
+                name="category"
+                withinPortal={true}
+                label="Category"
+                placeholder="Pick one"
+                defaultValue="personal"
+                data={[
+                { value: 'personal', label: 'Personal' },
+                { value: 'work', label: 'Work' },
+                { value: 'education', label: 'Education' },
+                ]}
+            />
+            </Box>
+            <Box
+            sx={(theme) => ({
+                flex: "1 1 45%"
+            })}
+            >
+                <DateInput
+                name="dueDate"
+                popoverProps={{ withinPortal: true }}
+                clearable={true}
+                
+                
+                label="Due Date"
+                placeholder="Date input"
+                maw={400}
+                mx="auto"
+                />
+            </Box>
+            <Box
+            sx={(theme) => ({
+                flex: "1 1 45%"
+            })}
+            >
 
+            </Box>
+            <Box 
+            sx={(theme) => ({
+                flex: "1 1 45%"
+            })}
+            >
+                <Text component="label">Priority: </Text>
+                <Flex gap={8}>
+                <Button variant="filled" name="priority" color="teal" uppercase
+                value="low"
+                >LOW</Button>
+                <Button variant="filled" name="priority" color="yellow" uppercase
+                value="medium"
+                >MEDIUM</Button>
+                <Button variant="filled" name="priority" color="red" uppercase
+                value="high"
+                >HIGH</Button>
+                </Flex>
+            </Box>
+            <Flex w="100%" justify="flex-end">
+                <Button>ADD</Button>
+            </Flex>
+            </Flex>
         </Modal>
     )
 }

@@ -43,7 +43,6 @@ export default function TaskModal({ isModalOpened, columnID, closeModal }: TaskM
     const [task, setTask] = useState(initialTask);
     const { state, dispatch } = useContext(AppContext);
     function handleClick(btnAction: string) {
-        console.log(columnID);
         switch (btnAction) {
             case "ADD_TASK":
                 if (task.title.length === 0) {
