@@ -69,17 +69,17 @@ function AddTask({ isModalOpened, columnID, closeModal }: TaskModalProps) {
                 dueDate: task.dueDate,
                 priority: task.priority,
                 }
-                dispatch({ type: "ADD_TASK", payload: { columnID, newTask } });
-                closeModal();
-                setInputBefore(false);
-                setTask({
-                id: uuid(),
-                title: "",
-                category: "",
-                dueDate: new Date(),
-                priority: "medium",
-                ifInputError: false,
-                })
+            dispatch({ type: "ADD_TASK", payload: { columnID, newTask } });
+            closeModal();
+            setInputBefore(false);
+            setTask({
+            id: uuid(),
+            title: "",
+            category: "",
+            dueDate: new Date(),
+            priority: "medium",
+            ifInputError: false,
+            })
     }
 
     function handleChange(eventName: string, eventValue: any) {
@@ -192,6 +192,7 @@ function EditTask({ isModalOpened, columnID, closeModal, itemID }: TaskModalProp
 
     function handleSaveBtnClick() {
         dispatch({ type: "EDIT_TASK", payload: { columnID: columnID, taskID: task.id, updatedTask: task } })
+        closeModal();
     }
     
     useEffect(() => {
