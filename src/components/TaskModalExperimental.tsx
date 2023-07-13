@@ -197,7 +197,6 @@ function EditTask({ isModalOpened, columnID, closeModal, itemID }: TaskModalProp
     useEffect(() => {
         const taskFromContext = state.columns[columnID].items.find((item) => item.id === itemID);
         setTask(Object(taskFromContext));
-        console.log(typeof task.dueDate);
     }, [itemID])
 
     // useEffect(() => {

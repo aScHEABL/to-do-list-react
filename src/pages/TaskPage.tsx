@@ -136,7 +136,23 @@ export default function TaskPage() {
   
   useEffect(() => {
     const savedState = localStorage.getItem("state");
-    if (savedState) dispatch({ type: "SET_STATE", payload: JSON.parse(savedState) });
+    if (savedState) {
+      const parsedState = JSON.parse(savedState)
+      const updatedState = {
+        ...parsedState,
+        columns: Object.fromEntries(
+          Object.entries(parsedState.columns).map(([columnID, column]: any) => {
+            const updatedItems = column.items.map((item: any) => ({
+              ...item,
+              dueDate: new Date(item.dueDate),
+            }))
+            return [columnID, { ...column, items: updatedItems }];
+          })
+        )
+      }
+      console.log(updatedState);
+      dispatch({ type: "SET_STATE", payload: updatedState });
+    }
   }, [])
   
   useEffect(() => {
