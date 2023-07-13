@@ -248,10 +248,8 @@ function EditTask({ isModalOpened, columnID, closeModal, itemID }: TaskModalProp
                     name="dueDate"
                     popoverProps={{ withinPortal: true }}
                     clearable={true}
-                    // value={task.dueDate}
-                    // value={task.dueDate instanceof Date ? task.dueDate : new Date()}
-                    // onChange={(e: Date) => setTask({ ...task, dueDate: e })}
-                    // onChange={(e: Date) => setTask({ ...task, dueDate: new Date(e.toString()) })}
+                    value={task.dueDate}
+                    onChange={(e: Date) => setTask({ ...task, dueDate: e })}
                     label="Due Date"
                     placeholder="Date input"
                     maw={400}
