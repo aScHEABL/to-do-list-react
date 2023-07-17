@@ -34,7 +34,7 @@ const useStyles = createStyles((theme) => ({
     flex: "1 1 100%", 
     color: "white",
     '&:not([data-disabled])': theme.fn.hover({
-      backgroundColor: "rgba(245, 245, 245, 0.3)"
+      backgroundColor: "rgba(245, 245, 245, 0.3)",
     }),
   }, 
   btnTag: {
@@ -170,7 +170,13 @@ export default function TaskPage() {
           <Flex wrap="wrap">
             <Button size="xl" leftIcon={<BsCalendarCheck />} variant="subtle" 
             classNames={{ root: classes.btnLink, inner: classes.btnInner }}>Tasks</Button>
-            <Button size="xl" leftIcon={<BsCalendar3 />} variant="subtle" 
+            <Button size="xl" leftIcon={<BsCalendar3 />} variant="subtle" title="Work in progress feature" data-disabled 
+            sx={{ 
+              '&[data-disabled]': { 
+              pointerEvents: 'all',
+              backgroundColor: "rgba(245, 245, 245, 0.3)",
+             },
+             }}
             classNames={{ root: classes.btnLink, inner: classes.btnInner }}>Calendar View</Button>
             <Button size="xl" leftIcon={<BsTrash />} classNames={{ root: classes.btnLink, inner: classes.btnInner }} variant="subtle">Trash</Button>
           </Flex>
